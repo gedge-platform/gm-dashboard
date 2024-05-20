@@ -43,6 +43,7 @@ const DeploymentBasicInformation = observer(() => {
 
   const onChange = (e) => {
     const { value, name } = e.target;
+    console.log(name, value);
     if (name === "workspace") {
       loadProjectListInWorkspace(value);
       setWorkspace(value);
@@ -65,6 +66,7 @@ const DeploymentBasicInformation = observer(() => {
   };
   useEffect(() => {
     loadWorkSpaceList();
+    loadProjectListInWorkspace();
   }, []);
   return (
     <>
@@ -89,7 +91,7 @@ const DeploymentBasicInformation = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workspace.map((item) => (
+                  {workspace?.map((item) => (
                     <option value={item}>{item}</option>
                   ))}
                 </select>
@@ -107,12 +109,14 @@ const DeploymentBasicInformation = observer(() => {
                   name="project"
                   onChange={onChange}
                 >
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
                   <option value={""}>Select Project</option>
+                  {projectListinWorkspace.length > 0
+                    ? projectListinWorkspace?.map((project) => (
+                        <option value={project.projectName}>
+                          {project.projectName}
+                        </option>
+                      ))
+                    : "No Data"}
                 </select>
               </FormControl>
             </td>

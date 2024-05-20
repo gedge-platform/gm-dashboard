@@ -165,8 +165,10 @@ const CreateTrigger = observer((props) => {
   const onChangeMetadata = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
+
     const metadata = value.split(", ");
     console.log(metadata);
+
     if (postType === "HTTP") {
       setTriggerHttpInputs({
         ...triggerHttpInputs,
@@ -178,6 +180,18 @@ const CreateTrigger = observer((props) => {
         [name]: metadata,
       });
     }
+
+    // if (postType === "HTTP") {
+    //   setTriggerHttpInputs({
+    //     ...triggerHttpInputs,
+    //     [name]: metadata,
+    //   });
+    // } else {
+    //   setTriggerKatkaQueue({
+    //     ...triggerKatkaQueue,
+    //     [name]: metadata,
+    //   });
+    // }
   };
 
   return (

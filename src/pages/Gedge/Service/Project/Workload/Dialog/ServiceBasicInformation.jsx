@@ -33,6 +33,9 @@ const DeploymentBasicInformation = observer(() => {
   } = serviceStore;
   const { loadClusterInProject, clusterList } = clusterStore;
 
+  console.log("workspace ??? ", workspace);
+  console.log("projectListinWorkspace ??? ", projectListinWorkspace);
+
   const checkChange = ({ target: { checked, name } }) => {
     if (checked) {
       setClusterList([...cluster, name]);
@@ -88,8 +91,10 @@ const DeploymentBasicInformation = observer(() => {
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={""}>Select Workspace</option>
-                  {workspace.map((item) => (
+                  <option value={""} selected hidden disabled>
+                    Select Workspace
+                  </option>
+                  {workspace?.map((item) => (
                     <option value={item}>{item}</option>
                   ))}
                 </select>
@@ -108,12 +113,14 @@ const DeploymentBasicInformation = observer(() => {
                   name="project"
                   onChange={onChange}
                 >
-                  {projectListinWorkspace.map((project) => (
+                  <option value={""} selected hidden disabled>
+                    Select Project
+                  </option>
+                  {projectListinWorkspace?.map((project) => (
                     <option value={project.projectName}>
                       {project.projectName}
                     </option>
                   ))}
-                  <option value={""}>Select Project</option>
                 </select>
               </FormControl>
             </td>

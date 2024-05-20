@@ -1,6 +1,11 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import { workspaceStore, projectStore, deploymentStore, clusterStore } from "@/store";
+import {
+  workspaceStore,
+  projectStore,
+  deploymentStore,
+  clusterStore,
+} from "@/store";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
@@ -22,16 +27,24 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const DeploymentBasicInformation = observer(props => {
+const DeploymentBasicInformation = observer((props) => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
   const { loadWorkSpaceList, workSpaceList, workspace } = workspaceStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-  const { deploymentName, setDeployName, setCluster, setWorkspace, setProject, workspaceName, setWorkspaceName } = deploymentStore;
+  const {
+    deploymentName,
+    setDeployName,
+    setCluster,
+    setWorkspace,
+    setProject,
+    workspaceName,
+    setWorkspaceName,
+  } = deploymentStore;
 
   const { loadClusterInProject, clusters } = clusterStore;
 
-  const onChange = e => {
+  const onChange = (e) => {
     const { value, name } = e.target;
     if (name === "workspace") {
       loadProjectListInWorkspace(value);
@@ -83,7 +96,7 @@ const DeploymentBasicInformation = observer(props => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workspace.map(item => (
+                  {workspace?.map((item) => (
                     <option value={item}>{item}</option>
                   ))}
                 </select>
@@ -97,10 +110,16 @@ const DeploymentBasicInformation = observer(props => {
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select disabled={projectEnable} name="project" onChange={onChange}>
+                <select
+                  disabled={projectEnable}
+                  name="project"
+                  onChange={onChange}
+                >
                   <option value={""}>Select Project</option>
-                  {projectListinWorkspace.map(project => (
-                    <option value={project.projectName}>{project.projectName}</option>
+                  {projectListinWorkspace?.map((project) => (
+                    <option value={project.projectName}>
+                      {project.projectName}
+                    </option>
                   ))}
                 </select>
               </FormControl>

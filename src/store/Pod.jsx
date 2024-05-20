@@ -806,6 +806,7 @@ class Pod {
         }
       )
       .then((res) => {
+        console.log("res ?? ", res);
         if (res.status === 201) {
           swalError("Pod가 생성되었습니다.");
         } else {
