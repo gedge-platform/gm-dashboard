@@ -29,6 +29,7 @@ const CreateTrigger = observer((props) => {
   const { open, reloadFunc } = props;
   const triggerType = ["HTTP", "KafkaQueue"];
   const [postType, setPostType] = useState("");
+  const [metadata, setMetadata] = useState({ key: "", value: "" });
 
   const {
     loadFuncionsListAPI,
@@ -164,20 +165,30 @@ const CreateTrigger = observer((props) => {
 
   const onChangeMetadata = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    const metadata = value.split(", ");
-    console.log(metadata);
-    if (postType === "HTTP") {
-      setTriggerHttpInputs({
-        ...triggerHttpInputs,
-        [name]: metadata,
-      });
-    } else {
-      setTriggerKatkaQueue({
-        ...triggerKatkaQueue,
-        [name]: metadata,
-      });
-    }
+    setMetadata({
+      ...metadata,
+      [name]: value,
+    });
+  };
+
+  const addMetdata = () => {
+    if (metadata.key === "" || metadata.value === "") return;
+
+    setTriggerKatkaQueue({
+      ...triggerKatkaQueue,
+      metadata: [
+        ...triggerKatkaQueue.metadata,
+        `${metadata.key}=${metadata.value}`,
+      ],
+    });
+    setMetadata({ key: "", value: "" });
+  };
+
+  const deleteMetadata = (item) => {
+    setTriggerKatkaQueue({
+      ...triggerKatkaQueue,
+      metadata: triggerKatkaQueue.metadata.filter((data) => item !== data),
+    });
   };
 
   return (
@@ -354,7 +365,7 @@ const CreateTrigger = observer((props) => {
                 </th>
                 <td>
                   <CTextField
-                    type="text"
+                    type="number"
                     placeholder="Max Retries"
                     className="form-fullWidth"
                     name="maxretries"
@@ -369,7 +380,7 @@ const CreateTrigger = observer((props) => {
                 </th>
                 <td>
                   <CTextField
-                    type="text"
+                    type="number"
                     placeholder="Cooldown Period"
                     className="form-fullWidth"
                     name="cooldownperiod"
@@ -384,7 +395,7 @@ const CreateTrigger = observer((props) => {
                 </th>
                 <td>
                   <CTextField
-                    type="text"
+                    type="number"
                     placeholder="Pooling Interval"
                     className="form-fullWidth"
                     name="pollinginterval"
@@ -398,14 +409,66 @@ const CreateTrigger = observer((props) => {
                   Metadata <span className="requried">*</span>
                 </th>
                 <td>
-                  <CTextField
-                    type="text"
-                    placeholder="Metadata"
-                    className="form-fullWidth"
-                    name="metadata"
-                    onChange={onChangeMetadata}
-                    style={{ width: "100%" }}
-                  />
+                  {triggerKatkaQueue.metadata.map((item) => (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        margin: "2px 5px",
+                      }}
+                    >
+                      <div>{item}</div>
+                      <Button
+                        style={{ padding: "8px 13px" }}
+                        onClick={() => deleteMetadata(item)}
+                      >
+                        -
+                      </Button>
+                    </div>
+                  ))}
+                  <div>
+                    {/* {labels?.map((item) => (
+                      <tr>
+                        <th>Labels</th>
+                        <td style={{ width: "300px", padding: "8px" }}>
+                          {item.labelKey}
+                        </td>
+                        <td style={{ width: "300px", padding: "8px" }}>
+                          {item.labelValue}
+                        </td>
+                        <td>
+                          <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
+                        </td>
+                      </tr>
+                    ))} */}
+                  </div>
+                  <div>
+                    <CTextField
+                      type="text"
+                      placeholder="Key"
+                      className="form_fullWidth"
+                      name="key"
+                      onChange={onChangeMetadata}
+                      value={metadata.key}
+                      style={{ width: "46%" }}
+                    />
+                    <CTextField
+                      type="text"
+                      placeholder="Value"
+                      className="form_fullWidth"
+                      name="value"
+                      onChange={onChangeMetadata}
+                      value={metadata.value}
+                      style={{ width: "46%", marginLeft: "4px" }}
+                    />
+                    <Button
+                      style={{ marginLeft: "4px", padding: "8px 13px" }}
+                      onClick={addMetdata}
+                    >
+                      +
+                    </Button>
+                  </div>
                 </td>
               </tr>
               <tr>
