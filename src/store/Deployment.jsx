@@ -623,6 +623,11 @@ class Deployment {
             this.deploymentList = this.adminList.filter(
               (data) => data.cluster === "gm-cluster"
             );
+            this.loadDeploymentDetail(
+              this.deploymentList[0].name,
+              this.deploymentList[0].cluster,
+              this.deploymentList[0].project
+            );
             if (this.deploymentList.length !== 0) {
               this.adminDeploymentDetail = this.deploymentList[0];
               this.totalPages = Math.ceil(this.deploymentList.length / 10);
@@ -640,11 +645,6 @@ class Deployment {
         this.deploymentList = [];
         this.paginationList();
       });
-    this.loadDeploymentDetail(
-      this.deploymentList[0].name,
-      this.deploymentList[0].cluster,
-      this.deploymentList[0].project
-    );
   };
 
   loadDeploymentDetail = async (name, cluster, project) => {
@@ -898,6 +898,7 @@ class Deployment {
 
   postGSelectedClusterPriority = async (callback) => {
     const body = this.content;
+    console.log("body ??? ", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const userName = JSON.parse(localStorage.getItem("user")).id;
@@ -937,7 +938,10 @@ class Deployment {
       }
     };
 
+    console.log("option ??? ", option);
+
     const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
 
     const requestId = "requestId" + randomNumber;
 
@@ -952,6 +956,7 @@ class Deployment {
         }
       )
       .then((res) => {
+        console.log("res ??? ", res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
         } else {
@@ -1116,6 +1121,7 @@ class Deployment {
 
   postTemplateSelected = async (callback) => {
     const body = this.content;
+    console.log("body ??? ", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
@@ -1154,7 +1160,11 @@ class Deployment {
       }
     };
 
+    console.log("option ??? ", option);
+
     const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
+
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -1172,6 +1182,7 @@ class Deployment {
       //   body
       // )
       .then((res) => {
+        console.log("res ??? ", res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
         } else {

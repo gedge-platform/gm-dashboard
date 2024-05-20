@@ -56,6 +56,7 @@ const CreatePackage = observer((props) => {
     resetPackageSource();
     resetPackageDeploy();
     resetPackageCode();
+    setSelectFile();
   };
 
   const postPackage = async () => {
@@ -73,6 +74,7 @@ const CreatePackage = observer((props) => {
     resetPackageSource();
     resetPackageDeploy();
     resetPackageCode();
+    setSelectFile();
   };
 
   const onSelectFile = async (e) => {

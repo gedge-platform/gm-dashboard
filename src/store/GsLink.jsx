@@ -5,17 +5,23 @@ import { getItem } from "../utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
 class GsLink {
-  gsLinkList = [];
-
   totalElements = 0;
   currentPage = 1;
   totalPages = 1;
   resultList = {};
   viewList = null;
+  gsLinkList = [];
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    });
+  };
 
   gsLinkInfo = {
     user_name: "",
@@ -78,12 +84,6 @@ class GsLink {
     });
   };
 
-  initViewList = () => {
-    runInAction(() => {
-      this.viewList = null;
-    });
-  };
-
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
@@ -106,8 +106,8 @@ class GsLink {
     runInAction(() => {
       if (this.gsLinkList !== null) {
         this.viewList = this.gsLinkList.slice(
-          (this.currentPage - 1) * 10,
-          this.currentPage * 10
+          (this.currentPage - 1) * 20,
+          this.currentPage * 20
         );
       }
     });
@@ -119,12 +119,14 @@ class GsLink {
       .then((res) => {
         runInAction(() => {
           if (res.data !== null) {
-            this.gsLinkList = res.data;
-            this.totalPages = Math.ceil(res.data.length / 10);
-            this.totalElements = res.data.length;
+            this.gsLinkList = res.data.sort((a, b) => {
+              return new Date(b.request_time) - new Date(a.request_time);
+            });
+
+            // this.totalPages = Math.ceil(this.gsLinkList.length / 20);
+            this.totalElements = this.gsLinkList.length;
           } else {
             this.gsLinkList = [];
-            this.totalPages = "1";
           }
         });
       })
@@ -152,11 +154,14 @@ class GsLink {
         source_name: "",
         source_service: this.parameters.source_service,
         target_cluster: this.parameters.target_cluster,
+        origin_source_cluster: this.parameters.source_cluster,
       },
     };
+    console.log("body ???", body);
     await axios
       .post(`${GSLINK_URL}`, body)
       .then((res) => {
+        console.log("res ?? ", res);
         runInAction(() => {
           if (res.status === 200) {
             swalError("이동에 성공하였습니다.", callback);

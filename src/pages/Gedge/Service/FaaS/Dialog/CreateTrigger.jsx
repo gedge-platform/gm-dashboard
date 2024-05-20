@@ -56,6 +56,7 @@ const CreateTrigger = observer((props) => {
   const postTrigger = async () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
     const checkNum = /^[0-9]*$/;
+
     if (postType === "HTTP") {
       if (triggerHttpInputs.trig_name === "") {
         swalError("Trigger 이름을 입력해주세요");
@@ -163,7 +164,9 @@ const CreateTrigger = observer((props) => {
 
   const onChangeMetadata = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     const metadata = value.split(", ");
+    console.log(metadata);
     if (postType === "HTTP") {
       setTriggerHttpInputs({
         ...triggerHttpInputs,

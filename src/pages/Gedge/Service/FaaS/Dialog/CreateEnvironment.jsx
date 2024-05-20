@@ -47,7 +47,6 @@ const CreateEnvironment = observer((props) => {
 
   const postEnvironment = () => {
     PostEnvAPI(envName, envImage);
-
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };

@@ -78,15 +78,20 @@ const PackageListTab = observer(() => {
     setPackageName(e.value);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (packageName === "") {
       swalError("Environment를 선택해주세요!");
-    } else {
-      swalUpdate(packageName + "를 삭제하시겠습니까?", () =>
-        deletePackageAPI(packageName, reloadData())
-      );
+      return;
     }
-    setPackageName("");
+    swalUpdate(packageName + "를 삭제하시겠습니까?", async () => {
+      try {
+        await deletePackageAPI(packageName); // 비동기 처리 대기
+        await loadPackageListAPI(); // 성공 후 패키지 목록 갱신
+        setPackageName(""); // 성공 후 상태 초기화
+      } catch (error) {
+        console.error("패키지 삭제 중 오류 발생", error);
+      }
+    });
   };
 
   const handleClose = () => {

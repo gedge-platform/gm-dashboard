@@ -258,6 +258,7 @@ class FaasStatus {
     await axios.post(`${FAAS_URL}/environments`, body).then((res) => {
       if (res.status === 201) {
         swalError("Environment가 생성되었습니다.");
+        this.loadEnvListAPI();
       } else {
         swalError("Environment  생성 실패", callback);
       }
@@ -312,6 +313,7 @@ class FaasStatus {
       .then((res) => {
         if (res.status === 201) {
           swalError("Environment가 생성되었습니다.");
+          this.loadFuncionsListAPI();
         } else {
           swalError("Environment  생성 실패", callback);
         }
@@ -376,6 +378,22 @@ class FaasStatus {
       });
   };
 
+  createPackage = async (data) => {
+    const body = JSON.stringify(data);
+    try {
+      const response = await axios.post(`${FAAS_URL}/packages`, body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 201) {
+        swalError("Package가 생성되었습니다.");
+      }
+    } catch (error) {
+      swalError(error.response.data);
+    }
+  };
+
   deletePackageAPI = async (envName, callback) => {
     await axios.delete(`${FAAS_URL}/packages/${envName}`).then((res) => {
       if (res.status === 200) {
@@ -411,8 +429,10 @@ class FaasStatus {
 
   createTrigger = async (data) => {
     const body = { ...data };
+    console.log("body ???? ", body);
     try {
       const response = await axios.post(`${FAAS_URL}/triggers`, body);
+      console.log("res ??? ", response);
       if (response.status === 201) {
         swalError("Trigger가 생성되었습니다.");
       }
@@ -425,26 +445,11 @@ class FaasStatus {
     await axios.delete(`${FAAS_URL}/triggers/${trigName}`).then((res) => {
       if (res.status === 200) {
         swalError("Package가 삭제되었습니다.");
+        this.loadTriggerListAPI();
       } else {
         swalError("Package 삭제 실패", callback);
       }
     });
-  };
-
-  createPackage = async (data) => {
-    const body = JSON.stringify(data);
-    try {
-      const response = await axios.post(`${FAAS_URL}/packages`, body, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status === 201) {
-        swalError("Package가 생성되었습니다.");
-      }
-    } catch (error) {
-      swalError(error.response.data);
-    }
   };
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
-import { AgGrid } from "@/components/datagrids";
+import { AgGrid2 } from "@/components/datagrids/AgGrid2";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { observer } from "mobx-react";
@@ -13,6 +13,7 @@ import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
 
 const GsLinkListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [requestId, setRequestId] = useState("");
 
   const {
     gsLinkList,
@@ -35,13 +36,15 @@ const GsLinkListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleDelete = (e) => {
-    if (gsLinkList.request_id === "") {
+  const handleClick = (e) => {
+    setRequestId(e.data.request_id);
+  };
+
+  const handleDelete = () => {
+    if (requestId === "") {
       swalError("리퀘스트 아이디를 선택해주세요!");
     } else {
-      swalUpdate("삭제하시겠습니까?", () =>
-        deleteGsLink(gsLinkList.request_id)
-      );
+      swalUpdate("삭제하시겠습니까?", () => deleteGsLink(requestId));
     }
   };
 
@@ -137,10 +140,11 @@ const GsLinkListTab = observer(() => {
           </CommActionBar>
           <div className="tabPanelContainer">
             <div className="grid-height2">
-              <AgGrid
+              <AgGrid2
                 rowData={gsLinkList}
                 columnDefs={columDefs}
                 totalElements={totalElements}
+                onCellClicked={handleClick}
                 isBottom={false}
                 totalPages={totalPages}
                 currentPage={currentPage}

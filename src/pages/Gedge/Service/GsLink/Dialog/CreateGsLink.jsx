@@ -91,6 +91,8 @@ const CreateGsLink = observer((props) => {
       return;
     }
     postGsLink();
+    setStepValue(1);
+    initGsLinkInfo();
 
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
