@@ -4,11 +4,13 @@ import styled from "styled-components";
 import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "../../../../../utils/swal-utils";
 import { FormControl, Table } from "@material-ui/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import gsLinkStore from "../../../../../store/GsLink";
 import workspaceStore from "../../../../../store/WorkSpace";
 import projectStore from "../../../../../store/Project";
 import clusterStore from "../../../../../store/Cluster";
+import podStore from "../../../../../store/Pod";
+import serviceStore from "../../../../../store/Service";
 
 const CreateGsLinkStepOne = observer((props) => {
   const { open } = props;
@@ -21,14 +23,26 @@ const CreateGsLinkStepOne = observer((props) => {
   } = workspaceStore;
   const { projectListinWorkspace, loadProjectListInWorkspace, projectLists } =
     projectStore;
-  const { gsLinkInfo, setGsLinkInfo } = gsLinkStore;
+  const { gsLinkInfo, setGsLinkInfo, parameters, setParameters } = gsLinkStore;
+  const { loadPodList, podList } = podStore;
+  const { loadServiceList, serviceList } = serviceStore;
+
+  const [selectedService, setSelectedService] = useState([]);
+  const [selectedPod, setSelectedPod] = useState([]);
+  console.log("sourceClusterList ??? ", sourceClusterList);
 
   useEffect(() => {
-    loadWorkSpaceList();
+    loadPodList();
+  }, []);
+
+  useEffect(() => {
+    loadServiceList();
   }, []);
 
   const onChange = (e) => {
     const { name, value } = e.target;
+    console.log("name ? ", name);
+    console.log("value ? ", value);
 
     if (name === "workspace") {
       setGsLinkInfo("workspace_name", value);
@@ -36,8 +50,26 @@ const CreateGsLinkStepOne = observer((props) => {
       loadSourceCluster(value);
     }
 
-    if (name === "project") {
-      setGsLinkInfo("project_name", value);
+    if (name === "sourceCluster") {
+      //   const clusterListTemp = podList?.filter((data) => data.cluster === value);
+
+      //   console.log("clusterListTemp ??? ", clusterListTemp);
+      //   setSelectedPod(clusterListTemp);
+
+      const serviceListTemp = serviceList?.filter(
+        (data) => data.cluster === value
+      );
+      setSelectedService(serviceListTemp);
+
+      setParameters("source_cluster", value);
+    }
+
+    if (name === "service") {
+      setParameters("source_service", value);
+    }
+
+    if (name === "targetCluster") {
+      setParameters("target_cluster", value);
     }
   };
 
@@ -75,7 +107,7 @@ const CreateGsLinkStepOne = observer((props) => {
                   <option value={""} disabled hidden>
                     Select Workspace
                   </option>
-                  {workSpaceList.map((workspace) => (
+                  {workSpaceList?.map((workspace) => (
                     <option
                       key={workspace.workspaceUUID}
                       value={workspace.workspaceName}
@@ -90,28 +122,101 @@ const CreateGsLinkStepOne = observer((props) => {
 
           <tr>
             <th>
-              Project <span className="requried">*</span>
+              Source Cluster <span className="requried">*</span>
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={!gsLinkInfo.workspace_name}
-                  name="project"
+                  name="sourceCluster"
                   onChange={onChange}
-                  value={gsLinkInfo.project_name}
+                  value={parameters.source_cluster}
                 >
-                  <option value={""} selected hidden disabled>
-                    Select Project
+                  <option value={""} disabled hidden>
+                    Select source Cluster
                   </option>
-                  {projectListinWorkspace ? (
-                    projectListinWorkspace?.map((project) => (
-                      <option value={project.projectName}>
-                        {project.projectName}
-                      </option>
-                    ))
-                  ) : (
-                    <option value={""}>No Data</option>
-                  )}
+                  {sourceClusterList?.map((scluster) => (
+                    <option
+                      key={scluster.clusterName}
+                      value={scluster.clusterName}
+                    >
+                      {scluster.clusterName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+
+          {/* <tr>
+            <th>
+              Pod <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="service"
+                  onChange={onChange}
+                  value={parameters.source_service}
+                >
+                  <option value={""} disabled hidden>
+                    Select Pod
+                  </option>
+                  {selectedPod?.map((pod) => (
+                    <option key={pod.name} value={pod.name}>
+                      {pod.name}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr> */}
+
+          <tr>
+            <th>
+              Service <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="service"
+                  onChange={onChange}
+                  value={parameters.source_service}
+                >
+                  <option value={""} disabled hidden>
+                    Select Service
+                  </option>
+                  {selectedService?.map((service) => (
+                    <option key={service.name} value={service.name}>
+                      {service.name}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+
+          <tr>
+            <th>
+              Target Cluster <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="targetCluster"
+                  onChange={onChange}
+                  value={parameters.target_cluster}
+                >
+                  <option value={""} disabled hidden>
+                    Select source Cluster
+                  </option>
+                  {sourceClusterList?.map((tcluster) => (
+                    <option
+                      key={tcluster.clusterName}
+                      value={tcluster.clusterName}
+                    >
+                      {tcluster.clusterName}
+                    </option>
+                  ))}
                 </select>
               </FormControl>
             </td>

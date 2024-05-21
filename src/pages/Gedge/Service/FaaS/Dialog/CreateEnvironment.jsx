@@ -106,7 +106,7 @@ const CreateEnvironment = observer((props) => {
                 style={{ width: "100%" }}
               />
             </td>
-            <td style={{ display: "flex" }}>
+            {/* <td style={{ display: "flex" }}>
               <button
                 type="button"
                 style={{
@@ -123,7 +123,7 @@ const CreateEnvironment = observer((props) => {
               >
                 중복확인
               </button>
-            </td>
+            </td> */}
           </tr>
           <tr>
             <th>

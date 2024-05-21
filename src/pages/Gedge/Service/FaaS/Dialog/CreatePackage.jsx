@@ -93,6 +93,7 @@ const CreatePackage = observer((props) => {
   };
 
   const onChangePackage = (event) => {
+    console.log(event.target.value);
     setPostType(event.target.value);
   };
 
@@ -136,11 +137,17 @@ const CreatePackage = observer((props) => {
             <th>
               Post type <span className="requried">*</span>
             </th>
-            <td colSpan={3}>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="Posttype" onChange={onChangePackage}>
-                  <option value={""}>Select Post type</option>
-                  {Type.map((item) => (
+                <select
+                  name="Posttype"
+                  onChange={onChangePackage}
+                  value={postType}
+                >
+                  <option value={""} disabled hidden>
+                    Select Post type
+                  </option>
+                  {Type?.map((item) => (
                     <option value={item}>{item}</option>
                   ))}
                 </select>
@@ -174,7 +181,7 @@ const CreatePackage = observer((props) => {
                 <th>
                   Package Name <span className="requried">*</span>
                 </th>
-                <td colSpan={3}>
+                <td colSpan="3">
                   <div style={{ display: "flex" }}>
                     <CTextField
                       type="text"
@@ -182,7 +189,7 @@ const CreatePackage = observer((props) => {
                       className="form-fullWidth"
                       name="pack_name"
                       onChange={onChange}
-                      style={{ width: "100%", marginRight: "10px" }}
+                      style={{ width: "100%" }}
                     />
                     {/* <button style={{ width: "200px" }}>Unique Check</button> */}
                   </div>
@@ -214,7 +221,7 @@ const CreatePackage = observer((props) => {
                     className="form-fullWidth"
                     name="build"
                     onChange={onChange}
-                    style={{ width: "100%", marginRight: "10px" }}
+                    style={{ width: "100%" }}
                   />
                 </td>
               </tr>
@@ -255,7 +262,7 @@ const CreatePackage = observer((props) => {
                       className="form-fullWidth"
                       name="pack_name"
                       onChange={onChange}
-                      style={{ width: "100%", marginRight: "10px" }}
+                      style={{ width: "100%" }}
                     />
                     {/* <button style={{ width: "200px" }}>Unique Check</button> */}
                   </div>
@@ -292,7 +299,7 @@ const CreatePackage = observer((props) => {
                       className="form-fullWidth"
                       name="pack_name"
                       onChange={onChange}
-                      style={{ width: "100%", marginRight: "10px" }}
+                      style={{ width: "100%" }}
                     />
                     {/* <button style={{ width: "200px" }}>Unique Check</button> */}
                   </div>

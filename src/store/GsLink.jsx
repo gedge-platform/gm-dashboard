@@ -144,15 +144,16 @@ class GsLink {
 
     const body = {
       user_name: id,
-      workspace_name: this.gsLinkInfo.workspace_name,
-      project_name: this.gsLinkInfo.project_name,
-      namespace_name: "",
+      // workspace_name: this.gsLinkInfo.workspace_name,
+      workspace_name: "ws1",
+      project_name: "user1",
+      namespace_name: "p1-6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
       status: "active",
       source_type: "pod",
       parameters: {
         source_cluster: this.parameters.source_cluster,
-        source_name: "",
-        source_service: this.parameters.source_service,
+        source_name: "nginx-glink",
+        source_service: "nginx-glink-service",
         target_cluster: this.parameters.target_cluster,
         origin_source_cluster: this.parameters.source_cluster,
       },

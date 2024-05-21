@@ -78,6 +78,12 @@ const EnvironmentListTab = observer(() => {
     setOpen(false);
   };
 
+  const handlePut = () => {
+    if (envListName === "") {
+      swalError("Environment를 선택해주세요!");
+    }
+  };
+
   const handleDelete = () => {
     if (envListName === "") {
       swalError("Environment를 선택해주세요!");

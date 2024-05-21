@@ -51,21 +51,21 @@ const CreateGsLink = observer((props) => {
     initGsLinkInfo();
   };
 
-  const onClickStepTwo = (e) => {
-    if (gsLinkInfo.workspace_name === "") {
-      swalError("Workspace를 선택해주세요.");
-      return;
-    }
-    if (gsLinkInfo.project_name === "") {
-      swalError("Project를 선택해주세요");
-      return;
-    }
+  // const onClickStepTwo = (e) => {
+  //   if (gsLinkInfo.workspace_name === "") {
+  //     swalError("Workspace를 선택해주세요.");
+  //     return;
+  //   }
+  //   if (gsLinkInfo.project_name === "") {
+  //     swalError("Project를 선택해주세요");
+  //     return;
+  //   }
 
-    // setClearLA();
-    setStepValue(2);
-  };
+  //   // setClearLA();
+  //   setStepValue(2);
+  // };
 
-  const onClickStepThree = () => {
+  const onClickStepTwo = () => {
     if (parameters.source_cluster === "") {
       swalError("Cluster를 선택해주세요.");
       return;
@@ -118,62 +118,64 @@ const CreateGsLink = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
-            </div>
-          </div>
-        </>
-      );
-    } else if (stepValue === 2) {
-      return (
-        <>
-          <CreateGsLinkStepTwo />
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "32px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "300px",
-                justifyContent: "center",
-              }}
-            >
-              <Button onClick={() => onClickBackStepOne()}>이전</Button>
-              <ButtonNext onClick={(e) => onClickStepThree(e)}>다음</ButtonNext>
-            </div>
-          </div>
-        </>
-      );
-    } else if (stepValue === 3) {
-      return (
-        <>
-          <CreateGsLinkStepThree />
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "32px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "300px",
-                justifyContent: "center",
-              }}
-            >
-              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
-              <ButtonNext onClick={() => createtGsLink()}>이동</ButtonNext>
+              <ButtonNext onClick={(e) => createtGsLink(e)}>이동</ButtonNext>
             </div>
           </div>
         </>
       );
     }
+    // else if (stepValue === 2) {
+    //   return (
+    //     <>
+    //       <CreateGsLinkStepTwo />
+
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           justifyContent: "flex-end",
+    //           marginTop: "32px",
+    //         }}
+    //       >
+    //         <div
+    //           style={{
+    //             display: "flex",
+    //             width: "300px",
+    //             justifyContent: "center",
+    //           }}
+    //         >
+    //           <Button onClick={() => onClickBackStepOne()}>이전</Button>
+    //           <ButtonNext onClick={(e) => onClickStepThree(e)}>다음</ButtonNext>
+    //         </div>
+    //       </div>
+    //     </>
+    //   );
+    // }
+    // else if (stepValue === 3) {
+    //   return (
+    //     <>
+    //       <CreateGsLinkStepThree />
+
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           justifyContent: "flex-end",
+    //           marginTop: "32px",
+    //         }}
+    //       >
+    //         <div
+    //           style={{
+    //             display: "flex",
+    //             width: "300px",
+    //             justifyContent: "center",
+    //           }}
+    //         >
+    //           <Button onClick={() => onClickBackStepTwo()}>이전</Button>
+    //           <ButtonNext onClick={() => createtGsLink()}>이동</ButtonNext>
+    //         </div>
+    //       </div>
+    //     </>
+    //   );
+    // }
   };
 
   return (

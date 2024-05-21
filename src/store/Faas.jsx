@@ -6,6 +6,7 @@ import { swalError } from "../utils/swal-utils";
 
 class FaasStatus {
   envList = [];
+  envDetail = {};
   functionsList = [];
   packageList = [];
   triggerList = [];
@@ -27,6 +28,13 @@ class FaasStatus {
   setEnvImage = (value) => {
     runInAction(() => {
       this.envImage = value;
+    });
+  };
+
+  poolSize = "";
+  setPoolSize = (value) => {
+    runInAction(() => {
+      this.poolSize = value;
     });
   };
 
@@ -257,10 +265,10 @@ class FaasStatus {
     };
     await axios.post(`${FAAS_URL}/environments`, body).then((res) => {
       if (res.status === 201) {
-        swalError("Environment가 생성되었습니다.");
+        swalError("생성되었습니다");
         this.loadEnvListAPI();
       } else {
-        swalError("Environment  생성 실패", callback);
+        swalError("생성 실패", callback);
       }
     });
   };
@@ -268,10 +276,38 @@ class FaasStatus {
   DeleteEnvAPI = async (envName, callback) => {
     await axios.delete(`${FAAS_URL}/environments/${envName}`).then((res) => {
       if (res.status === 200) {
-        swalError("Environment가 삭제되었습니다.");
+        swalError("삭제되었습니다");
       } else {
-        swalError("Environment  삭제 실패", callback);
+        swalError("삭제 실패", callback);
       }
+    });
+  };
+
+  loadEnvDetailAPI = async (envName) => {
+    await axios
+      .get(`${FAAS_URL}/environments/${envName}`)
+      .then((res) => {
+        console.log(res);
+        runInAction(() => {
+          if (res.data !== null) {
+            this.envDetail = res.data;
+          } else {
+            this.envDetail = {};
+          }
+        });
+      })
+      .catch((error) => {
+        this.envList = {};
+      });
+  };
+
+  putEnvAPI = async (envName) => {
+    const body = {
+      poolsize: this.poolSize,
+    };
+    await axios.put(`${FAAS_URL}/environments/${envName}`, body).then((res) => {
+      swalError("수정되었습니다");
+      this.loadEnvListAPI();
     });
   };
 
@@ -312,10 +348,10 @@ class FaasStatus {
       })
       .then((res) => {
         if (res.status === 201) {
-          swalError("Environment가 생성되었습니다.");
+          swalError("생성되었습니다");
           this.loadFuncionsListAPI();
         } else {
-          swalError("Environment  생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -323,7 +359,7 @@ class FaasStatus {
   DeleteFuncionsAPI = async (envName, callback) => {
     await axios.delete(`${FAAS_URL}/functions/${envName}`).then((res) => {
       if (res.status === 200) {
-        swalError("Environment가 삭제되었습니다.");
+        swalError("삭제되었습니다");
       } else {
         swalError("Environment  삭제 실패", callback);
       }
@@ -368,10 +404,10 @@ class FaasStatus {
       .then((res) => {
         runInAction(() => {
           if (res.data.length === 0) {
-            swalError("파일이 업로드 되지 않았습니다.", callback);
+            swalError("파일이 업로드 실패", callback);
             return false;
           } else {
-            swalError("파일이 업로드 되었습니다.", callback);
+            swalError("파일이 업로드 되었습니다", callback);
             return true;
           }
         });
@@ -387,7 +423,7 @@ class FaasStatus {
         },
       });
       if (response.status === 201) {
-        swalError("Package가 생성되었습니다.");
+        swalError("생성되었습니다.");
       }
     } catch (error) {
       swalError(error.response.data);
@@ -397,9 +433,9 @@ class FaasStatus {
   deletePackageAPI = async (envName, callback) => {
     await axios.delete(`${FAAS_URL}/packages/${envName}`).then((res) => {
       if (res.status === 200) {
-        swalError("Package가 삭제되었습니다.");
+        swalError("삭제되었습니다");
       } else {
-        swalError("Package 삭제 실패", callback);
+        swalError("삭제 실패", callback);
       }
     });
   };
@@ -434,7 +470,7 @@ class FaasStatus {
       const response = await axios.post(`${FAAS_URL}/triggers`, body);
       console.log("res ??? ", response);
       if (response.status === 201) {
-        swalError("Trigger가 생성되었습니다.");
+        swalError("생성되었습니다");
       }
     } catch (error) {
       swalError(error.response.data);
@@ -444,10 +480,10 @@ class FaasStatus {
   deleteTriggerAPI = async (trigName, callback) => {
     await axios.delete(`${FAAS_URL}/triggers/${trigName}`).then((res) => {
       if (res.status === 200) {
-        swalError("Package가 삭제되었습니다.");
+        swalError("삭제되었습니다");
         this.loadTriggerListAPI();
       } else {
-        swalError("Package 삭제 실패", callback);
+        swalError("삭제 실패", callback);
       }
     });
   };

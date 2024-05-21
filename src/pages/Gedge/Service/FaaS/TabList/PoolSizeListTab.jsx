@@ -5,59 +5,82 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
-import CreatePoolSize from "../Dialog/CreatePoolSize";
+import PutPoolSize from "../Dialog/PutPoolSize";
+import FaasStore from "../../../../../store/Faas";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { swalError } from "../../../../../utils/swal-utils";
 
 const PoolSizeListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const {
+    loadEnvListAPI,
+    envList,
+    totalElements,
+    totalPages,
+    currentPage,
+    goNextPage,
+    goPrevPage,
+    DeleteEnvAPI,
+    initViewList,
+    envName,
+    setEnvName,
+    loadEnvDetailAPI,
+  } = FaasStore;
+  const [envListName, setEnvListName] = useState("");
+
   const [columDefs] = useState([
     {
       headerName: "이름",
-      field: "name",
+      field: "env_name",
       filter: true,
     },
     {
-      headerName: "ID",
-      field: "uid",
-      filter: true,
-    },
-    {
-      headerName: "크기",
+      headerName: "풀 사이즈",
       field: "poolsize",
       filter: true,
+      cellRenderer: function ({ data: { fission_spec } }) {
+        return `<span>${fission_spec.poolsize}</span>`;
+      },
     },
     {
       headerName: "네임스페이스",
       field: "namespace",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
+      cellRenderer: function ({ data: { fission_meta } }) {
+        return `<span>${fission_meta.namespace}</span>`;
       },
     },
     {
-      headerName: "상태",
-      field: "ready",
+      headerName: "이미지",
+      field: "image",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
     },
-    // {
-    //   headerName: "생성일",
-    //   field: "createAt",
-    //   filter: "agDateColumnFilter",
-    //   filterParams: agDateColumnFilter(),
-    //   minWidth: 150,
-    //   maxWidth: 200,
-    //   cellRenderer: function (data) {
-    //     return `<span>${dateFormatter(data.value)}</span>`;
-    //   },
-    // },
+    {
+      headerName: "생성일",
+      field: "create_at",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function ({ data: { fission_meta } }) {
+        return `<span>${dateFormatter(fission_meta.creationTimestamp)}</span>`;
+      },
+    },
   ]);
 
+  const handleClick = (e) => {
+    setEnvListName(e.value);
+    loadEnvDetailAPI(e.value);
+  };
+
   const handleOpen = () => {
-    setOpen(true);
+    if (envListName === "") {
+      swalError("Environment를 선택해주세요!");
+    } else {
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
@@ -68,27 +91,36 @@ const PoolSizeListTab = observer(() => {
     setReRun(true);
   };
 
-  useEffect(() => {}, [reRun]);
+  useEffect(() => {
+    loadEnvListAPI();
+    return () => {
+      setReRun(false);
+      initViewList();
+    };
+  }, [reRun]);
 
   return (
     <CReflexBox>
       <PanelBox>
-        <CommActionBar reloadFunc={reloadData}></CommActionBar>
+        <CommActionBar reloadFunc={reloadData}>
+          <CCreateButton onClick={handleOpen}>수정</CCreateButton>
+        </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
-              rowData={[]}
+              onCellClicked={handleClick}
+              rowData={envList}
               columnDefs={columDefs}
-              totalElements={0}
+              totalElements={totalElements}
               isBottom={false}
-              totalPages={1}
-              currentPage={1}
-              goNextPage={2}
-              goPrevPage={0}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
             />
           </div>
         </div>
-        <CreatePoolSize
+        <PutPoolSize
           open={open}
           onClose={handleClose}
           reloadFunc={reloadData}
