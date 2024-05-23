@@ -24,30 +24,34 @@ const CreateGsLinkStepOne = observer((props) => {
   const { projectListinWorkspace, loadProjectListInWorkspace, projectLists } =
     projectStore;
   const { gsLinkInfo, setGsLinkInfo, parameters, setParameters } = gsLinkStore;
-  const { loadPodList, podList } = podStore;
+  const { loadPodList, podList, podListInclusterAPI, podListIncluster } =
+    podStore;
   const { loadServiceList, serviceList } = serviceStore;
 
   const [selectedService, setSelectedService] = useState([]);
   const [selectedPod, setSelectedPod] = useState([]);
-  console.log("sourceClusterList ??? ", sourceClusterList);
+  console.log("podListIncluster ??? ", podListIncluster);
 
   useEffect(() => {
     loadPodList();
   }, []);
 
   useEffect(() => {
+    loadProjectListInWorkspace();
     loadServiceList();
   }, []);
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    console.log("name ? ", name);
-    console.log("value ? ", value);
 
     if (name === "workspace") {
       setGsLinkInfo("workspace_name", value);
       loadProjectListInWorkspace(value);
       loadSourceCluster(value);
+    }
+
+    if (name === "project") {
+      setGsLinkInfo("project_name", value);
     }
 
     if (name === "sourceCluster") {
@@ -62,6 +66,11 @@ const CreateGsLinkStepOne = observer((props) => {
       setSelectedService(serviceListTemp);
 
       setParameters("source_cluster", value);
+      podListInclusterAPI(value, gsLinkInfo.project_name);
+    }
+
+    if (name === "pod") {
+      setParameters("source_name", value);
     }
 
     if (name === "service") {
@@ -122,6 +131,33 @@ const CreateGsLinkStepOne = observer((props) => {
 
           <tr>
             <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="project"
+                  onChange={onChange}
+                  value={gsLinkInfo.project_name}
+                >
+                  <option value={""} disabled hidden>
+                    Select Project
+                  </option>
+                  {projectListinWorkspace?.map((project) => (
+                    <option
+                      key={project.projectName}
+                      value={project.projectName}
+                    >
+                      {project.projectName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+
+          <tr>
+            <th>
               Source Cluster <span className="requried">*</span>
             </th>
             <td colSpan="3">
@@ -147,21 +183,21 @@ const CreateGsLinkStepOne = observer((props) => {
             </td>
           </tr>
 
-          {/* <tr>
+          <tr>
             <th>
               Pod <span className="requried">*</span>
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
-                  name="service"
+                  name="pod"
                   onChange={onChange}
-                  value={parameters.source_service}
+                  value={parameters.source_name}
                 >
                   <option value={""} disabled hidden>
                     Select Pod
                   </option>
-                  {selectedPod?.map((pod) => (
+                  {podListIncluster?.map((pod) => (
                     <option key={pod.name} value={pod.name}>
                       {pod.name}
                     </option>
@@ -169,7 +205,7 @@ const CreateGsLinkStepOne = observer((props) => {
                 </select>
               </FormControl>
             </td>
-          </tr> */}
+          </tr>
 
           <tr>
             <th>

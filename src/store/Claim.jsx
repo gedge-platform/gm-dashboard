@@ -385,11 +385,17 @@ class Claim {
     await axios
       .get(`${SERVER_URL}/pvcs?user=${id}`)
       .then((res) => {
+        console.log("claim ", res);
         runInAction(() => {
-          this.pvClaimList = res.data.data;
-          this.pvClaimLists = res.data.data;
-          this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
-          this.totalElements = res.data.data ? res.data.data.length : 0;
+          if (res.data.data !== null) {
+            this.pvClaimList = res.data.data;
+            this.pvClaimLists = res.data.data;
+            this.pvClaimListInDeployment = res.data.data;
+            this.totalElements = res.data.data;
+          }
+
+          // this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
+          // this.totalElements = res.data.data ? res.data.data.length : 0;
         });
       })
       .then(() => {
@@ -397,6 +403,7 @@ class Claim {
       })
       .catch(() => {
         this.pvClaimList = [];
+        this.pvClaimLists = [];
         this.paginationList();
       });
 

@@ -55,18 +55,40 @@ const CreatePod = observer((props) => {
       name: serviceName,
     },
     spec: {
-      selector: {
-        app: appName,
-      },
+      type: "NodePort",
       ports: [
         {
-          protocol: protocol,
-          port: port,
-          targetPort: targetPort,
+          port: "80",
+          targetPort: "5000",
+          nodePort: "30022",
+          name: "runtime",
         },
       ],
+      selector: {
+        app: "runtime-test",
+      },
     },
   };
+
+  // const template = {
+  //   apiVersion: "v1",
+  //   kind: "Service",
+  //   metadata: {
+  //     name: serviceName,
+  //   },
+  //   spec: {
+  //     selector: {
+  //       app: appName,
+  //     },
+  //     ports: [
+  //       {
+  //         protocol: protocol,
+  //         port: port,
+  //         targetPort: targetPort,
+  //       },
+  //     ],
+  //   },
+  // };
 
   const handleClose = () => {
     props.onClose && props.onClose();

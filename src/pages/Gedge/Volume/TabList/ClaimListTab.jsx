@@ -34,6 +34,7 @@ const ClaimListTab = observer(() => {
     goPrevPage,
     goNextPage,
   } = claimStore;
+  console.log(pvClaimLists);
 
   const [columDefs] = useState([
     {

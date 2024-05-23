@@ -214,6 +214,7 @@ class Volume {
     await axios
       .get(`${SERVER_URL}/pvs?user=${id}`)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           this.pVolumesList = res.data.data;
           this.pVolumesLists = res.data.data;

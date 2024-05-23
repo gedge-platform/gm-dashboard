@@ -142,20 +142,35 @@ class GsLink {
   postGsLink = async (data, callback) => {
     let { id } = getItem("user");
 
+    // const body = {
+    //   user_name: id,
+    //   workspace_name: this.gsLinkInfo.workspace_name,
+    //   project_name: this.gsLinkInfo.project_name,
+    //   namespace_name: "p1-6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
+    //   status: "active",
+    //   source_type: "pod",
+    //   parameters: {
+    //     source_cluster: this.parameters.source_cluster,
+    //     source_name: this.parameters.source_name,
+    //     source_service: this.parameters.,
+    //     target_cluster: this.parameters.target_cluster,
+    //     // origin_source_cluster: this.parameters.source_cluster,
+    //   },
+    // };
+
     const body = {
       user_name: id,
-      // workspace_name: this.gsLinkInfo.workspace_name,
-      workspace_name: "ws1",
-      project_name: "user1",
-      namespace_name: "p1-6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
+      workspace_name: "demo-87f5a49c-a2cd-4774-a04d-88fefef11f73",
+      project_name: "demo-project-87f5a49c-a2cd-4774-a04d-88fefef11f73",
+      namespace_name: "demo-project-87f5a49c-a2cd-4774-a04d-88fefef11f73",
       status: "active",
       source_type: "pod",
       parameters: {
-        source_cluster: this.parameters.source_cluster,
-        source_name: "nginx-glink",
-        source_service: "nginx-glink-service",
-        target_cluster: this.parameters.target_cluster,
-        origin_source_cluster: this.parameters.source_cluster,
+        source_cluster: "mec(ilsan)",
+        source_name: "nginx-pod-glink",
+        source_service: "nginx-service-glink",
+        target_cluster: "onpremise(dongjak)",
+        // origin_source_cluster: this.parameters.source_cluster,
       },
     };
     console.log("body ???", body);

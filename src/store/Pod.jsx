@@ -577,9 +577,10 @@ class Pod {
   podListInclusterAPI = async (clusterName, projectName) => {
     await axios
       .get(`${SERVER_URL}/pods?cluster=${clusterName}&project=${projectName}`)
-      .then(({ data }) => {
+      .then((res) => {
+        console.log(res);
         runInAction(() => {
-          this.podListIncluster = data.data;
+          this.podListIncluster = res.data.data;
         });
       });
   };

@@ -47,6 +47,8 @@ const CreateTamplateStepThree = observer(() => {
     (data) => data.workspace.workspaceName === appInfo.appWorkspace
   );
 
+  console.log("selectedProject ???", selectedProject);
+
   const openTargetClusters = (index) => {
     setOpen2(true);
     setContainerIndex(index);

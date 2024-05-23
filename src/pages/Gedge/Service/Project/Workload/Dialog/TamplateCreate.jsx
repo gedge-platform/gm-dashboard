@@ -11,6 +11,7 @@ import TamplateYaml from "./TamplateYAML";
 import templateStore from "../../../../../../store/Template";
 import { stringify } from "json-to-pretty-yaml2";
 import { swalError } from "../../../../../../utils/swal-utils";
+import CreateTamplateStepYolo from "./CreateTamplateStepYolo";
 
 const Button = styled.button`
   background-color: #fff;
@@ -49,7 +50,14 @@ const TamplateCreate = observer((props) => {
     postTemplateGSetCluster,
   } = deploymentStore;
 
-  const { deploymentYamlTemplate, serviceYamlTemplate } = templateStore;
+  const {
+    deploymentYamlTemplate,
+    serviceYamlTemplate,
+    yoloTemplate1,
+    yoloTemplate2,
+    yoloTemplate3,
+    yoloTemplate4,
+  } = templateStore;
 
   const { loadWorkSpaceList } = workspaceStore;
 
@@ -58,66 +66,103 @@ const TamplateCreate = observer((props) => {
 
   const goStepTwo = () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+
     if (appInfo.app === "") {
       swalError("App을 선택해주세요");
       return;
     }
-    if (appInfo.appVersion === "") {
-      swalError("Version을 선택해주세요");
-      return;
+
+    if (appInfo.app === "yolo") {
+      if (appInfo.appName === "") {
+        swalError("App 이름을 입력해주세요");
+        return;
+      } else if (!checkRegex.test(appInfo.appName)) {
+        swalError("영어소문자와 숫자만 입력해주세요.");
+        return;
+      }
+      setStepValue(2);
+    } else {
+      if (appInfo.appVersion === "") {
+        swalError("Version을 선택해주세요");
+        return;
+      }
+      if (appInfo.appName === "") {
+        swalError("App 이름을 입력해주세요");
+        return;
+      } else if (!checkRegex.test(appInfo.appName)) {
+        swalError("영어소문자와 숫자만 입력해주세요.");
+        return;
+      }
+      if (appInfo.appWorkspace === "") {
+        swalError("Workspace를 선택해주세요");
+        return;
+      }
+      if (appInfo.appProject === "") {
+        swalError("Project를 선택해주세요");
+        return;
+      }
+      if (appInfo.appReplicas === "") {
+        swalError("Project를 선택해주세요");
+        return;
+      }
+      setStepValue(2);
     }
-    if (appInfo.appName === "") {
-      swalError("App 이름을 입력해주세요");
-      return;
-    } else if (!checkRegex.test(appInfo.appName)) {
-      swalError("영어소문자와 숫자만 입력해주세요.");
-      return;
-    }
-    if (appInfo.appWorkspace === "") {
-      swalError("Workspace를 선택해주세요");
-      return;
-    }
-    if (appInfo.appProject === "") {
-      swalError("Project를 선택해주세요");
-      return;
-    }
-    if (appInfo.appReplicas === "") {
-      swalError("Project를 선택해주세요");
-      return;
-    }
-    setStepValue(2);
   };
 
   const goStepThree = () => {
-    if (deployment.priority.name === "GLowLatencyPriority") {
-      if (deployment.priority.sourceCluster === "") {
-        swalError("Source Cluster를 선택해주세요");
-        return;
-      }
-      // if (deployment.priority.sourceNode === "") {
-      //   swalError("Source Node를 선택해주세요");
-      //   return;
-      // }
-      if (deployment.priority.podName === "") {
-        swalError("Pod를 선택해주세요");
-        return;
-      }
-    }
-    if (deployment.priority.name === "GMostRequestPriority") {
-    }
-    if (deployment.priority.name === "GSelectedClusterPriority") {
-      if (deployment.priority.mode === "node") {
-        if (deployment.priority.sourceNode === "") {
-          swalError("Source Node를 선택해주세요");
+    if (appInfo.app !== "yolo") {
+      if (deployment.priority.name === "GLowLatencyPriority") {
+        if (deployment.priority.sourceCluster === "") {
+          swalError("Source Cluster를 선택해주세요");
+          return;
+        }
+        if (deployment.priority.podName === "") {
+          swalError("Pod를 선택해주세요");
           return;
         }
       }
+      if (deployment.priority.name === "GMostRequestPriority") {
+      }
+      if (deployment.priority.name === "GSelectedClusterPriority") {
+        if (deployment.priority.mode === "node") {
+          if (deployment.priority.sourceNode === "") {
+            swalError("Source Node를 선택해주세요");
+            return;
+          }
+        }
+      }
+      if (targetClusters.length === 0) {
+        swalError("Target Cluster를 선택해주세요");
+        return;
+      }
+      setStepValue(3);
+    } else {
+      if (deployment.priority.name === "GLowLatencyPriority") {
+        if (deployment.priority.sourceCluster === "") {
+          swalError("Source Cluster를 선택해주세요");
+          return;
+        }
+        if (deployment.priority.podName === "") {
+          swalError("Pod를 선택해주세요");
+          return;
+        }
+      }
+      if (deployment.priority.name === "GMostRequestPriority") {
+      }
+      if (deployment.priority.name === "GSelectedClusterPriority") {
+        if (deployment.priority.mode === "node") {
+          if (deployment.priority.sourceNode === "") {
+            swalError("Source Node를 선택해주세요");
+            return;
+          }
+        }
+      }
+      if (targetClusters.length === 0) {
+        swalError("Target Cluster를 선택해주세요");
+        return;
+      }
+      setStepValue(4);
     }
-    if (targetClusters.length === 0) {
-      swalError("Target Cluster를 선택해주세요");
-      return;
-    }
-    setStepValue(3);
   };
 
   const backStepOne = () => {
@@ -134,26 +179,53 @@ const TamplateCreate = observer((props) => {
   };
 
   const createApp = () => {
-    setContent(
-      stringify(deploymentYamlTemplate) +
-        "---\n" +
-        stringify(serviceYamlTemplate)
-    );
-    if (deployment.priority.name === "GLowLatencyPriority") {
-      postTemplateGLowLatency();
-    }
-    if (deployment.priority.name === "GMostRequestPriority") {
-      postTemplateGMostRequest();
-    }
-    if (deployment.priority.name === "GSelectedClusterPriority") {
-      postTemplateSelected();
-    }
-    if (deployment.priority.name === "GSetClusterPriority") {
-      postTemplateGSetCluster();
-    }
+    if (appInfo.app === "yolo") {
+      setContent(
+        stringify(yoloTemplate1) +
+          "---\n" +
+          stringify(yoloTemplate2) +
+          "---\n" +
+          stringify(yoloTemplate3) +
+          "---\n" +
+          stringify(yoloTemplate4)
+      );
+      if (deployment.priority.name === "GLowLatencyPriority") {
+        postTemplateGLowLatency();
+      }
+      if (deployment.priority.name === "GMostRequestPriority") {
+        postTemplateGMostRequest();
+      }
+      if (deployment.priority.name === "GSelectedClusterPriority") {
+        postTemplateSelected();
+      }
+      if (deployment.priority.name === "GSetClusterPriority") {
+        postTemplateGSetCluster();
+      }
 
-    handleClose();
-    props.reloadFunc && props.reloadFunc();
+      handleClose();
+      props.reloadFunc && props.reloadFunc();
+    } else {
+      setContent(
+        stringify(deploymentYamlTemplate) +
+          "---\n" +
+          stringify(serviceYamlTemplate)
+      );
+      if (deployment.priority.name === "GLowLatencyPriority") {
+        postTemplateGLowLatency();
+      }
+      if (deployment.priority.name === "GMostRequestPriority") {
+        postTemplateGMostRequest();
+      }
+      if (deployment.priority.name === "GSelectedClusterPriority") {
+        postTemplateSelected();
+      }
+      if (deployment.priority.name === "GSetClusterPriority") {
+        postTemplateGSetCluster();
+      }
+
+      handleClose();
+      props.reloadFunc && props.reloadFunc();
+    }
   };
 
   useEffect(() => {
@@ -224,6 +296,30 @@ const TamplateCreate = observer((props) => {
       return (
         <>
           <CreateTamplateStepFour />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={backStepTwo}>이전</Button>
+              <ButtonNext onClick={createApp}>Create App</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 4) {
+      return (
+        <>
+          <CreateTamplateStepYolo />
           <div
             style={{
               display: "flex",

@@ -842,11 +842,11 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
           console.log("res ???", res);
         } else {
           console.log("res ???", res);
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -889,9 +889,9 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -958,9 +958,9 @@ class Deployment {
       .then((res) => {
         console.log("res ??? ", res);
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -1002,9 +1002,9 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -1067,9 +1067,9 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -1112,9 +1112,9 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다.");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -1184,9 +1184,9 @@ class Deployment {
       .then((res) => {
         console.log("res ??? ", res);
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -1228,9 +1228,9 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.");
+          swalError("생성되었습니다");
         } else {
-          swalError("Deployment 생성 실패", callback);
+          swalError("생성 실패", callback);
         }
       });
   };
@@ -1259,10 +1259,9 @@ class Deployment {
         `${SERVER_URL}/deployments/${deploymentName}?cluster=${clusterName}&project=${projectName} `
       )
       .then((res) => {
-        if (res.status === 200)
-          swalError("Deployment가 삭제되었습니다.", callback);
+        if (res.status === 200) swalError("삭제되었습니다", callback);
       })
-      .catch((err) => swalError("삭제에 실패하였습니다."));
+      .catch((err) => swalError("삭제 실패"));
   };
 }
 

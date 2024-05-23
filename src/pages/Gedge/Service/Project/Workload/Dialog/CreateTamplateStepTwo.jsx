@@ -58,11 +58,6 @@ const Table = styled.table`
   }
 `;
 
-const ImgButton = styled.button`
-  background-image: url(/images/resource/nginx.png);
-  border: black;
-`;
-
 const CreateTamplateStepTwo = observer((props) => {
   const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } =
     workspaceStore;

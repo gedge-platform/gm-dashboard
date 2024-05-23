@@ -36,44 +36,6 @@ class Template {
     },
   ];
 
-  // deploymentYamlTemplate = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: "",
-  //     namespace: "",
-  //   },
-  //   spec: {
-  //     replicas: 1,
-  //     selector: {
-  //       matchLabels: {
-  //         app: "",
-  //       },
-  //     },
-  //     template: {
-  //       metadata: {
-  //         labels: {
-  //           app: "",
-  //         },
-  //       },
-  //       spec: {
-  //         containers: [
-  //           {
-  //             name: "",
-  //             image: "",
-  //             // env: [],
-  //             ports: [
-  //               {
-  //                 containerPort: 80,
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   },
-  // };
-
   deploymentYamlTemplate = {
     apiVersion: "apps/v1",
     kind: "Deployment",
@@ -216,6 +178,180 @@ class Template {
     } else {
       this.serviceYamlTemplate.spec.type = "NodePort";
     }
+  };
+
+  yoloTemplate1 = {
+    apiVersion: "v1",
+    kind: "Pod",
+    metadata: {
+      name: "yolo-runtime-test",
+      labels: {
+        app: "runtime-test",
+      },
+    },
+    spec: {
+      containers: [
+        {
+          name: "ubuntu",
+          image: "softonnet/runtime_test:v0.0.3.240520",
+          imagePullPolicy: "IfNotPresent",
+        },
+      ],
+    },
+  };
+
+  yoloTemplate2 = {
+    apiVersion: "v1",
+    kind: "ConfigMap",
+    metadata: {
+      name: "cfmap-yolov5-scenario",
+    },
+    data: {
+      "path.sh": `#!/bin/bash
+      echo export PATH=$NEW_PATH:$PATH >> $HOME/.bashrc`,
+    },
+  };
+
+  yoloTemplate3 = {
+    apiVersion: "v1",
+    kind: "Pod",
+    metadata: {
+      name: "yolov5-inference-server",
+      labels: {
+        app: "yolo-test",
+      },
+    },
+    spec: {
+      containers: [
+        {
+          name: "ubuntu",
+          image: "softonnet/yolov5/inference_test:v0.0.1.230616",
+          imagePullPolicy: "IfNotPresent",
+          command: ["/bin/bash", "-c"],
+          args: [
+            "source /root/path.sh; PATH=/opt/conda/envs/pt1.12.1_py38/bin:/root/volume/cuda/cuda-11.3/bin:$PATH; env; sh /script.sh;tail -f /dev/null",
+          ],
+          env: [
+            {
+              name: "NEW_PATH",
+              value:
+                "/opt/conda/envs/pt1.12.1_py38/bin:/root/volume/cuda/cuda-11.3/bin",
+            },
+            {
+              name: "LD_LIBRARY_PATH",
+              value:
+                "/root/volume/cuda/cuda-11.3/lib64:/root/volume/cudnn/cudnn-linux-x86_64-8.5.0.96_cuda11-archive/lib:/root/volume/tensorrt/TensorRT-8.4.3.1-cuda-11/lib",
+            },
+          ],
+          resources: {
+            limits: {
+              cpu: "4",
+              memory: "8G",
+              "nvidia.com/gpu": "1",
+            },
+          },
+          volumeMounts: [
+            {
+              mountPath: "/root/path.sh",
+              name: "fileconfig",
+              subPath: "path.sh",
+            },
+            {
+              mountPath: "/root/volume/cuda/cuda-11.3",
+              name: "nfs-volume-total",
+              subPath: "cuda/cuda-11.3",
+              readOnly: true,
+            },
+            {
+              mountPath:
+                "/root/volume/cudnn/cudnn-linux-x86_64-8.5.0.96_cuda11-archive",
+            },
+            {
+              name: "nfs-volume-total",
+              subPath: "cudnn/cudnn-linux-x86_64-8.5.0.96_cuda11-archive",
+              readOnly: true,
+            },
+            {
+              mountPath: "/opt/conda/envs/pt1.12.1_py38",
+              name: "nfs-volume-total",
+              subPath: "envs/pt1.12.1_py38",
+              readOnly: true,
+            },
+            {
+              mountPath: "/root/volume/tensorrt/TensorRT-8.4.3.1-cuda-11/",
+              name: "nfs-volume-total",
+              subPath: "tensorrt/TensorRT-8.4.3.1-cuda-11",
+              readOnly: true,
+            },
+            {
+              mountPath: "/root/volume/dataset/coco128",
+              name: "nfs-volume-total",
+              subPath: "dataset/coco128",
+              readOnly: true,
+            },
+          ],
+        },
+      ],
+      volumes: [
+        {
+          name: "nfs-volume-total",
+          persistentVolumeClaim: {
+            claimName: "nfs-pvc-total",
+          },
+        },
+        {
+          name: "fileconfig",
+          configMap: {
+            name: "cfmap-yolov5-scenario",
+            defaultMode: "0777",
+          },
+        },
+      ],
+    },
+  };
+
+  yoloTemplate4 = {
+    apiVersion: "v1",
+    kind: "Service",
+    metadata: {
+      name: "yolo-np",
+    },
+    spec: {
+      type: "NodePort",
+      ports: [
+        {
+          port: 3000,
+          targetPort: 3000,
+          nodePort: 30021,
+          name: "restapi-torch ",
+        },
+      ],
+      selector: {
+        app: "yolo-test",
+      },
+    },
+  };
+
+  yoloTemplate5 = {
+    apiVersion: "v1",
+    kind: "Service",
+    metadata: {
+      name: "runtime-np",
+    },
+    spec: {
+      type: "NodePort",
+      ports: [
+        {
+          port: 5000,
+          targetPort: 5000,
+          nodePort: 30022,
+          name: "runtime",
+        },
+      ],
+      selector: {
+        app: "runtime-test",
+      },
+    },
   };
 }
 
