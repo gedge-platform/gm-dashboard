@@ -57,6 +57,9 @@ const TamplateCreate = observer((props) => {
     yoloTemplate2,
     yoloTemplate3,
     yoloTemplate4,
+    yoloTemplate5,
+    yoloTemplate6,
+    yoloTemplate7,
   } = templateStore;
 
   const { loadWorkSpaceList } = workspaceStore;
@@ -180,15 +183,7 @@ const TamplateCreate = observer((props) => {
 
   const createApp = () => {
     if (appInfo.app === "yolo") {
-      setContent(
-        stringify(yoloTemplate1) +
-          "---\n" +
-          stringify(yoloTemplate2) +
-          "---\n" +
-          stringify(yoloTemplate3) +
-          "---\n" +
-          stringify(yoloTemplate4)
-      );
+      setContent(stringify(yoloTemplate6) + "---\n" + stringify(yoloTemplate7));
       if (deployment.priority.name === "GLowLatencyPriority") {
         postTemplateGLowLatency();
       }

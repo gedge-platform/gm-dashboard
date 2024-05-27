@@ -71,8 +71,8 @@ const Title = {
   Project: "프로젝트",
   CreateUser: "사용자별 생성",
   PlatformControl: "플랫폼 관리",
-  FaaS: "FaaS",
-  GsLink: "GLink",
+  FaaS: "함수 서비스",
+  GsLink: "서비스 이동",
 
   ServiceAdminDashboard: "통합 대시보드",
   ServiceAdminMapDashboard: "지도 대시보드",

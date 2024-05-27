@@ -1055,23 +1055,14 @@ class Deployment {
     const options = encodeURI(JSON.stringify(option()));
     const requestId = "requestId" + randomNumber;
 
-    await axios
-      .post(
-        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GLowLatencyPriority&options=${options}`,
-        body,
-        {
-          headers: {
-            "Content-Type": "application/x-yaml",
-          },
-        }
-      )
-      .then((res) => {
-        if (res.status === 201) {
-          swalError("생성되었습니다");
-        } else {
-          swalError("생성 실패", callback);
-        }
-      });
+    await axios.post(`http://210.207.104.209:13000/test2`).then((res) => {
+      console.log(res);
+      if (res.status === 201) {
+        swalError("생성되었습니다");
+      } else {
+        swalError("생성 실패", callback);
+      }
+    });
   };
 
   postTemplateGMostRequest = async (callback) => {

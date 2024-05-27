@@ -184,7 +184,8 @@ class Template {
     apiVersion: "v1",
     kind: "Pod",
     metadata: {
-      name: "yolo-runtime-test",
+      name: "yolo-runtime-scnario",
+      namespace: "p-test-9b4aa182-fd56-497d-95ef-0d0b2fb2da10",
       labels: {
         app: "runtime-test",
       },
@@ -351,6 +352,52 @@ class Template {
       selector: {
         app: "runtime-test",
       },
+    },
+  };
+
+  yoloTemplate6 = {
+    apiVersion: "v1",
+    kind: "Pod",
+    metadata: {
+      name: "yolo-detection",
+      labels: {
+        app: "yolo-detection",
+      },
+    },
+    spec: {
+      containers: [
+        {
+          name: "yolo8",
+          image: "edy100/yolo8:1.0",
+          ports: [{ containerPort: 80 }],
+          resources: {
+            limits: {
+              "nvidia.com/gpu": "1",
+            },
+          },
+        },
+      ],
+    },
+  };
+
+  yoloTemplate7 = {
+    apiVersion: "v1",
+    kind: "Service",
+    metadata: {
+      name: "yolo-detection-service",
+    },
+    spec: {
+      type: "NodePort",
+      selector: {
+        app: "yolo-detection",
+      },
+      ports: [
+        {
+          name: "http",
+          port: 80,
+          targetPort: 80,
+        },
+      ],
     },
   };
 }

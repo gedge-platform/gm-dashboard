@@ -18,6 +18,9 @@ const CreateTamplateStepYolo = observer(() => {
     yoloTemplate2,
     yoloTemplate3,
     yoloTemplate4,
+    yoloTemplate5,
+    yoloTemplate6,
+    yoloTemplate7,
   } = templateStore;
 
   // useEffect(() => {
@@ -51,15 +54,7 @@ const CreateTamplateStepYolo = observer(() => {
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
-        value={
-          stringify(yoloTemplate1) +
-          "---\n" +
-          stringify(yoloTemplate2) +
-          "---\n" +
-          stringify(yoloTemplate3) +
-          "---\n" +
-          stringify(yoloTemplate4)
-        }
+        value={stringify(yoloTemplate6) + "---\n" + stringify(yoloTemplate7)}
         setOptions={{
           enableBasicAutocompletion: false,
           enableLiveAutocompletion: false,
