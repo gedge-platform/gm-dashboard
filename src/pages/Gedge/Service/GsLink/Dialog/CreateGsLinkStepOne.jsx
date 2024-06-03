@@ -84,18 +84,10 @@ const CreateGsLinkStepOne = observer((props) => {
 
   return (
     <>
-      <div className="step-container">
+      <div className="step-container" style={{ marginLeft: "447px" }}>
         <div className="signup-step">
           <div className="step current">
             <span>기본 정보</span>
-          </div>
-          <div className="arr"></div>
-          <div className="step">
-            <span>소스 클러스터</span>
-          </div>
-          <div className="arr"></div>
-          <div className="step">
-            <span>대상 클러스터</span>
           </div>
         </div>
       </div>

@@ -167,8 +167,8 @@ class GsLink {
       source_type: "pod",
       parameters: {
         source_cluster: "mec(ilsan)",
-        source_name: "nginx-glink-demo",
-        source_service: "nginx-service-demo",
+        source_name: "glink-demo-pod",
+        source_service: "glink-demo-service",
         target_cluster: "onpremise(dongjak)",
         // origin_source_cluster: this.parameters.source_cluster,
       },
